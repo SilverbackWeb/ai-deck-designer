@@ -1,7 +1,6 @@
 
 export enum AppState {
     UPLOADING = 'UPLOADING',
-    GENERATING = 'GENERATING',
     DESIGNING = 'DESIGNING',
 }
 

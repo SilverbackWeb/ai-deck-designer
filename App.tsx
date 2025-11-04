@@ -7,7 +7,6 @@ import { fileToBase64 } from './utils/imageUtils';
 
 import Header from './components/Header';
 import ImageUploader from './components/ImageUploader';
-import Loader from './components/Loader';
 import StyleCarousel from './components/StyleCarousel';
 import CompareSlider from './components/CompareSlider';
 import ChatInterface from './components/ChatInterface';
@@ -22,6 +21,7 @@ export default function App() {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [isChatLoading, setIsChatLoading] = useState<boolean>(false);
   const [isLightingLoading, setIsLightingLoading] = useState<boolean>(false);
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleStartOver = useCallback(() => {
@@ -33,13 +33,14 @@ export default function App() {
     setChatHistory([]);
     setIsChatLoading(false);
     setIsLightingLoading(false);
+    setIsGenerating(false);
     setError(null);
   }, []);
 
   const handleImageUpload = useCallback(async (file: File) => {
     try {
       setError(null);
-      setAppState(AppState.GENERATING);
+      setIsGenerating(true);
       const { base64, mimeType } = await fileToBase64(file);
       setOriginalImage({ file, base64 });
 
@@ -50,10 +51,12 @@ export default function App() {
       setAppState(AppState.DESIGNING);
     } catch (e) {
       console.error("Error during image processing:", e);
-      setError("Failed to generate deck designs. Please try another image.");
-      handleStartOver();
+      setError("Failed to generate deck designs. This can happen with invalid images or API key billing issues. Please try another image.");
+      setOriginalImage(null);
+    } finally {
+      setIsGenerating(false);
     }
-  }, [handleStartOver]);
+  }, []);
 
   const handleStyleSelect = useCallback((index: number) => {
     setSelectedStyleIndex(index);
@@ -117,9 +120,7 @@ export default function App() {
   const renderContent = () => {
     switch (appState) {
       case AppState.UPLOADING:
-        return <ImageUploader onImageUpload={handleImageUpload} />;
-      case AppState.GENERATING:
-        return <Loader message="Our AI is designing your dream deck..." />;
+        return <ImageUploader onImageUpload={handleImageUpload} isGenerating={isGenerating} error={error} />;
       case AppState.DESIGNING:
         if (!originalImage || !currentDeckImage) {
           handleStartOver();
@@ -178,11 +179,6 @@ export default function App() {
     <div className="min-h-screen bg-slate-900 text-slate-100 font-sans flex flex-col items-center">
       <Header showStartOver={appState !== AppState.UPLOADING} onStartOver={handleStartOver} />
       <main className="w-full flex-grow flex flex-col items-center justify-center p-4">
-        {error && (
-          <div className="w-full max-w-4xl bg-red-500/20 border border-red-500 text-red-300 px-4 py-3 rounded-md mb-4 text-center">
-            {error}
-          </div>
-        )}
         {renderContent()}
       </main>
     </div>
