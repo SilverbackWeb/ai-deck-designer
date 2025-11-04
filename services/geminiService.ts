@@ -1,14 +1,8 @@
-
 import { GoogleGenAI, Modality } from "@google/genai";
 import { GeneratedStyle } from '../types';
 
-const API_KEY = import.meta.env.VITE_API_KEY;
-
-if (!API_KEY) {
-    throw new Error("VITE_API_KEY environment variable not set");
-}
-
-const ai = new GoogleGenAI({ apiKey: API_KEY });
+// Fix: Per coding guidelines, API key must be from `process.env.API_KEY`.
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 const textModel = 'gemini-2.5-flash';
 const visionModel = 'gemini-2.5-flash-image';
 
@@ -112,5 +106,7 @@ export const getChatResponse = async (prompt: string): Promise<string> => {
           systemInstruction: "You are an AI deck design consultant. Answer questions about deck materials, costs, maintenance, and building advice. Be helpful, concise, and friendly. Do not answer questions outside of this scope.",
         }
     });
-    return response.text ?? "I'm sorry, I couldn't come up with a response. Please try again.";
+    // Fix: Per coding guidelines, `response.text` is the correct way to get the
+    // string output and is not nullable.
+    return response.text;
 };

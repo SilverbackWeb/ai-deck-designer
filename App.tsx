@@ -140,7 +140,7 @@ export default function App() {
                     Visualizer: <span className="text-cyan-400">{selectedStyleName}</span>
                 </h2>
                 <CompareSlider
-                  original={originalImage.base64}
+                  original={`data:${originalImage.file.type};base64,${originalImage.base64}`}
                   modified={currentDeckImage}
                 />
                 <button
