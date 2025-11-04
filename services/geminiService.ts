@@ -105,11 +105,11 @@ export const getChatResponse = async (prompt: string): Promise<{ text: string; s
         contents: prompt,
         config: {
           systemInstruction: "You are an AI deck design consultant. Answer questions about deck materials, costs, maintenance, and building advice. Be helpful, concise, and friendly. Do not answer questions outside of this scope. When you use your knowledge from Google Search, provide the sources.",
+          tools: [{googleSearch: {}}],
         },
-        tools: [{googleSearch: {}}],
     });
 
-    const text = response.text;
+    const text = response.text ?? '';
     const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
     
     const sources: Source[] = groundingChunks
