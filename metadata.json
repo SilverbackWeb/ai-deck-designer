@@ -1,0 +1,5 @@
+{
+  "name": "AI Deck Design Consultant",
+  "description": "An AI-powered web application to help users visualize and customize deck designs for their backyards using Gemini.",
+  "requestFramePermissions": []
+}
