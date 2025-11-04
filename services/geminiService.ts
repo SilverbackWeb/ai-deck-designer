@@ -1,7 +1,7 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 import { GeneratedStyle } from '../types';
 
-// Fix: Per coding guidelines, API key must be from `process.env.API_KEY`.
+// FIX: Adhere to Gemini API guidelines by using process.env.API_KEY directly for initialization.
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 const textModel = 'gemini-2.5-flash';
 const visionModel = 'gemini-2.5-flash-image';
@@ -106,7 +106,5 @@ export const getChatResponse = async (prompt: string): Promise<string> => {
           systemInstruction: "You are an AI deck design consultant. Answer questions about deck materials, costs, maintenance, and building advice. Be helpful, concise, and friendly. Do not answer questions outside of this scope.",
         }
     });
-    // Fix: Per coding guidelines, `response.text` is the correct way to get the
-    // string output and is not nullable.
     return response.text;
 };

@@ -1,11 +1,8 @@
-/// <reference types="vite/client" />
-
-// Fix: Augment the NodeJS namespace to add the API_KEY property to the
-// existing `process.env` type. This avoids redeclaring the `process` variable,
-// which causes conflicts with global types from Node.js that are present in
-// the project.
-declare namespace NodeJS {
-  interface ProcessEnv {
-    readonly API_KEY: string;
-  }
-}
+// FIX: The reference to "vite/client" was causing a file not found error.
+// This has been removed and replaced with a declaration for `process` to support
+// API key handling as per the Gemini API guidelines, resolving TypeScript errors.
+declare var process: {
+  env: {
+    API_KEY: string;
+  };
+};
