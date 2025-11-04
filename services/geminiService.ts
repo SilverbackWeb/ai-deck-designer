@@ -2,10 +2,10 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 import { GeneratedStyle } from '../types';
 
-const API_KEY = process.env.API_KEY;
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 if (!API_KEY) {
-    throw new Error("API_KEY environment variable not set");
+    throw new Error("VITE_API_KEY environment variable not set");
 }
 
 const ai = new GoogleGenAI({ apiKey: API_KEY });
@@ -44,8 +44,7 @@ export const generateInitialDecks = async (
                 if (part.inlineData) {
                     const base64ImageBytes = part.inlineData.data;
                     const imageUrl = `data:${part.inlineData.mimeType};base64,${base64ImageBytes}`;
-                    const simpleStyleName = style.split(',')[1]?.trim() || style.split(' ')[1] + " " + style.split(' ')[2] || "Custom Deck";
-
+                    
                     return { style: style.replace('A photorealistic, ', '').split('made of')[0].trim(), imageUrl };
                 }
             }
@@ -113,5 +112,5 @@ export const getChatResponse = async (prompt: string): Promise<string> => {
           systemInstruction: "You are an AI deck design consultant. Answer questions about deck materials, costs, maintenance, and building advice. Be helpful, concise, and friendly. Do not answer questions outside of this scope.",
         }
     });
-    return response.text;
+    return response.text ?? "I'm sorry, I couldn't come up with a response. Please try again.";
 };

@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { AppState, ChatMessage, GeneratedStyle } from './types';
 import { DECK_STYLES, VISUAL_KEYWORDS } from './constants';
 import { generateInitialDecks, refineDeckImage, getChatResponse } from './services/geminiService';
