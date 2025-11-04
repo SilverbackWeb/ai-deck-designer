@@ -5,7 +5,6 @@ export const DECK_STYLES: string[] = [
     "A photorealistic, beautiful cedar wood deck with a natural finish, in a simple rectangular shape.",
     "A photorealistic, modern composite Trex-style deck in a grey color, with black aluminum railings.",
     "A photorealistic, unique hexagonal geometric deck extending into the yard.",
-    "A photorealistic, deck with a large wooden pergola over it for shade.",
     "A photorealistic, coastal-style deck painted white with wide stairs leading down to the yard."
 ];
 

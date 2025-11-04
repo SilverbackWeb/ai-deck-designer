@@ -10,7 +10,7 @@ import ImageUploader from './components/ImageUploader';
 import StyleCarousel from './components/StyleCarousel';
 import CompareSlider from './components/CompareSlider';
 import ChatInterface from './components/ChatInterface';
-import { LightbulbIcon } from './components/icons';
+import { SparklesIcon } from './components/icons';
 
 export default function App() {
   const [appState, setAppState] = useState<AppState>(AppState.UPLOADING);
@@ -20,7 +20,7 @@ export default function App() {
   const [currentDeckImage, setCurrentDeckImage] = useState<string | null>(null);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [isChatLoading, setIsChatLoading] = useState<boolean>(false);
-  const [isLightingLoading, setIsLightingLoading] = useState<boolean>(false);
+  const [isPergolaLoading, setIsPergolaLoading] = useState<boolean>(false);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,7 +32,7 @@ export default function App() {
     setCurrentDeckImage(null);
     setChatHistory([]);
     setIsChatLoading(false);
-    setIsLightingLoading(false);
+    setIsPergolaLoading(false);
     setIsGenerating(false);
     setError(null);
   }, []);
@@ -63,20 +63,20 @@ export default function App() {
     setCurrentDeckImage(generatedStyles[index]?.imageUrl || null);
   }, [generatedStyles]);
 
-  const handleRefineWithLighting = useCallback(async () => {
+  const handleRefineWithPergola = useCallback(async () => {
     if (!currentDeckImage || !originalImage) return;
 
-    setIsLightingLoading(true);
+    setIsPergolaLoading(true);
     setError(null);
     try {
       const { base64: currentDeckBase64, mimeType } = await fileToBase64(currentDeckImage);
-      const newImage = await refineDeckImage(currentDeckBase64, mimeType, "Add subtle, warm, ambient lighting to the deck, like post cap lights or under-railing illumination.");
+      const newImage = await refineDeckImage(currentDeckBase64, mimeType, "Add a beautiful wooden pergola over the main deck area for shade.");
       setCurrentDeckImage(newImage);
     } catch (e) {
-      console.error("Error refining image with lighting:", e);
-      setError("Could not add lighting. Please try again.");
+      console.error("Error refining image with pergola:", e);
+      setError("Could not add pergola. Please try again.");
     } finally {
-      setIsLightingLoading(false);
+      setIsPergolaLoading(false);
     }
   }, [currentDeckImage, originalImage]);
 
@@ -145,19 +145,19 @@ export default function App() {
                   modified={currentDeckImage}
                 />
                 <button
-                  onClick={handleRefineWithLighting}
-                  disabled={isLightingLoading}
+                  onClick={handleRefineWithPergola}
+                  disabled={isPergolaLoading}
                   className="w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isLightingLoading ? (
+                  {isPergolaLoading ? (
                     <>
                       <div className="w-5 h-5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin"></div>
-                      Adding Light...
+                      Adding Pergola...
                     </>
                   ) : (
                     <>
-                      <LightbulbIcon className="w-6 h-6" />
-                      One-Click Refinement: Add Subtle Lighting
+                      <SparklesIcon className="w-6 h-6" />
+                      One-Click Refinement: Add Pergola
                     </>
                   )}
                 </button>
