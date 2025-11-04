@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 
 interface CompareSliderProps {
@@ -72,12 +71,12 @@ const CompareSlider: React.FC<CompareSliderProps> = ({ original, modified }) => 
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
     >
-      <img src={original} alt="Original Yard" className="absolute inset-0 w-full h-full object-contain pointer-events-none" />
+      <img src={original} alt="Original Yard" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
       <div
         className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none"
         style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
       >
-        <img src={modified} alt="Deck Design" className="absolute inset-0 w-full h-full object-contain pointer-events-none" />
+        <img src={modified} alt="Deck Design" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
       </div>
 
       <div
@@ -85,7 +84,7 @@ const CompareSlider: React.FC<CompareSliderProps> = ({ original, modified }) => 
         style={{ left: `calc(${sliderPosition}% - 2px)` }}
       >
         <div className="absolute top-1/2 -translate-y-1/2 -left-4 w-9 h-9 rounded-full bg-cyan-400 border-4 border-slate-900 flex items-center justify-center">
-            <svg className="w-5 h-5 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path></svg>
+            <svg className="w-5 h-5 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeWidth="3" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path></svg>
         </div>
       </div>
       

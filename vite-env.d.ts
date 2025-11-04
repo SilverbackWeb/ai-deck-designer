@@ -1,9 +1,11 @@
 /// <reference types="vite/client" />
 
-// Fix: Add a declaration for `process` to allow using `process.env.API_KEY`
-// as required by the coding guidelines, without causing a TypeScript error.
-declare var process: {
-  env: {
-    API_KEY: string;
-  };
-};
+// Fix: Augment the NodeJS namespace to add the API_KEY property to the
+// existing `process.env` type. This avoids redeclaring the `process` variable,
+// which causes conflicts with global types from Node.js that are present in
+// the project.
+declare namespace NodeJS {
+  interface ProcessEnv {
+    readonly API_KEY: string;
+  }
+}
