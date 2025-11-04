@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { ChatMessage } from '../types';
-import { PaperPlaneIcon, BotIcon, UserIcon } from './icons';
+import { PaperPlaneIcon, BotIcon, UserIcon, LinkIcon } from './icons';
 
 interface ChatInterfaceProps {
   history: ChatMessage[];
@@ -38,7 +38,22 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ history, isLoading, onSen
             <div key={index} className={`flex items-start gap-3 ${msg.role === 'user' ? 'justify-end' : ''}`}>
               {msg.role === 'model' && <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyan-500 flex items-center justify-center"><BotIcon className="w-5 h-5 text-slate-900" /></div>}
               <div className={`max-w-xs md:max-w-md p-3 rounded-lg ${msg.role === 'user' ? 'bg-amber-500 text-slate-900' : 'bg-slate-700 text-slate-200'}`}>
-                <p className="text-sm">{msg.parts}</p>
+                <p className="text-sm whitespace-pre-wrap">{msg.parts}</p>
+                {msg.sources && msg.sources.length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-slate-600">
+                    <h4 className="text-xs font-semibold text-slate-400 mb-2">Sources:</h4>
+                    <ul className="space-y-1">
+                      {msg.sources.map((source, i) => (
+                        <li key={i}>
+                          <a href={source.uri} target="_blank" rel="noopener noreferrer" className="flex items-start gap-2 text-cyan-400 hover:text-cyan-300 text-xs transition-colors">
+                            <LinkIcon className="w-3 h-3 mt-0.5 flex-shrink-0" />
+                            <span className="truncate">{source.title || new URL(source.uri).hostname}</span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
               {msg.role === 'user' && <div className="flex-shrink-0 w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center"><UserIcon className="w-5 h-5 text-slate-900" /></div>}
             </div>

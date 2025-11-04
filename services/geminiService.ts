@@ -1,5 +1,6 @@
+
 import { GoogleGenAI, Modality } from "@google/genai";
-import { GeneratedStyle } from '../types';
+import { GeneratedStyle, Source } from '../types';
 
 // FIX: Adhere to Gemini API guidelines by using process.env.API_KEY directly for initialization.
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -98,13 +99,29 @@ export const refineDeckImage = async (
 };
 
 
-export const getChatResponse = async (prompt: string): Promise<string> => {
+export const getChatResponse = async (prompt: string): Promise<{ text: string; sources: Source[] }> => {
     const response = await ai.models.generateContent({
         model: textModel,
         contents: prompt,
         config: {
-          systemInstruction: "You are an AI deck design consultant. Answer questions about deck materials, costs, maintenance, and building advice. Be helpful, concise, and friendly. Do not answer questions outside of this scope.",
-        }
+          systemInstruction: "You are an AI deck design consultant. Answer questions about deck materials, costs, maintenance, and building advice. Be helpful, concise, and friendly. Do not answer questions outside of this scope. When you use your knowledge from Google Search, provide the sources.",
+        },
+        tools: [{googleSearch: {}}],
     });
-    return response.text;
+
+    const text = response.text;
+    const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
+    
+    const sources: Source[] = groundingChunks
+        .map(chunk => chunk.web)
+        .filter((web): web is { uri: string; title: string } => !!web && !!web.uri && !!web.title)
+        .reduce((acc: Source[], current) => {
+            // Deduplicate sources based on URI
+            if (!acc.some(item => item.uri === current.uri)) {
+                acc.push({ uri: current.uri, title: current.title });
+            }
+            return acc;
+        }, []);
+
+    return { text, sources };
 };

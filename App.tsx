@@ -96,8 +96,8 @@ export default function App() {
         setCurrentDeckImage(newImage);
         setChatHistory(prev => [...prev, { role: 'model', parts: 'I\'ve updated the design for you. What do you think?' }]);
       } else {
-        const textResponse = await getChatResponse(prompt);
-        setChatHistory(prev => [...prev, { role: 'model', parts: textResponse }]);
+        const response = await getChatResponse(prompt);
+        setChatHistory(prev => [...prev, { role: 'model', parts: response.text, sources: response.sources }]);
       }
     } catch (e) {
       console.error("Error handling chat message:", e);
